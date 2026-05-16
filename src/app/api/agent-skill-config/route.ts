@@ -1,10 +1,16 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// Lazy-init: env not available at build time, only at request time
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Supabase env vars missing");
+  return createClient(url, key);
+}
+const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+  get(_, prop) { return (getSupabase() as any)[prop]; },
+});
 
 // PATCH /api/agent-skill-config
 // Body: { agentId: number, skillId: string, config: object }

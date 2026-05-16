@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// Service-role client — runtime writes are server-to-server, no RLS gate needed.
-// Falls back to anon key only if service key is missing in env.
-const SB_URL  = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SB_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(SB_URL, SB_KEY);
+// Lazy-init: env vars are NOT available during `next build` page-data
+// collection, only at request time. Module-level createClient() with empty
+// strings throws "supabaseKey is required" and breaks the build.
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) throw new Error("Supabase env vars missing");
+  return createClient(url, key);
+}
+const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+  get(_, prop) { return (getSupabase() as any)[prop]; },
+});
 
 /**
  * POST /api/agent-activity

@@ -36,10 +36,19 @@ const OG_NEWTON_CHAIN = defineChain({
   },
 });
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy-init Supabase client — env vars are not available at build time on
+// Vercel; only at request time. Initializing at module level would break
+// `next build` with "supabaseKey is required" during page-data collection.
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) {
+    throw new Error(
+      "Supabase env vars missing — set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel"
+    );
+  }
+  return createClient(url, key);
+}
 
 /**
  * GET /api/faucet/claim?wallet=0x...
@@ -60,7 +69,7 @@ export async function GET(req: Request) {
 
     const normalizedWallet = walletAddress.toLowerCase();
 
-    const { data: existing } = await supabase
+    const { data: existing } = await getSupabase()
       .from("faucet_claims")
       .select("tx_hash, amount, claimed_at")
       .eq("wallet_address", normalizedWallet)
@@ -100,7 +109,7 @@ export async function POST(req: Request) {
     const normalizedWallet = walletAddress.toLowerCase();
 
     // ── 1. Double-claim guard ───────────────────────────────────────────────
-    const { data: existing } = await supabase
+    const { data: existing } = await getSupabase()
       .from("faucet_claims")
       .select("id")
       .eq("wallet_address", normalizedWallet)
@@ -160,7 +169,7 @@ export async function POST(req: Request) {
 
     // ── 5. Record claim (best-effort; tx already broadcast) ─────────────────
     try {
-      await supabase.from("faucet_claims").insert({
+      await getSupabase().from("faucet_claims").insert({
         wallet_address: normalizedWallet,
         amount: FAUCET_AMOUNT,
         tx_hash: txHash,
