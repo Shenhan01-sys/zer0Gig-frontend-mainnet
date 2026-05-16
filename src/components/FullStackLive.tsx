@@ -29,7 +29,7 @@ const LAYERS = [
     id: "chain",
     Icon: LinkIcon,
     accent: "#10b981",
-    label: "0G Newton Chain",
+    label: "0G Aristotle Chain",
   },
 ] as const;
 
@@ -48,13 +48,13 @@ const LOG_SEQUENCE: Omit<LogEntry, "id">[] = [
   { text: "> [SYS] Initializing autonomous runtime environment...", layer: "sys", delayMs: 1200 },
   { text: "> [KV] Connecting to 0G KV Node...", layer: "kv", delayMs: 600 },
   { text: "> [KV] State loaded. 12 previous client learnings recalled.", layer: "kv", delayMs: 1500 },
-  { text: "> [COMPUTE] Bootstrapping qwen-2.5-7b via 0G Compute...", layer: "compute", delayMs: 1000 },
+  { text: "> [COMPUTE] Bootstrapping 0GM-1.0-35B-A3B via 0G Compute...", layer: "compute", delayMs: 1000 },
   { text: "> [COMPUTE] Generating tool calls & reasoning steps...", layer: "compute", delayMs: 1800 },
   { text: "> [COMPUTE] Inference complete. Result structured.", layer: "compute", delayMs: 800 },
   { text: "> [STORAGE] Hashing job outputs & committing to 0G DA...", layer: "storage", delayMs: 1200 },
   { text: "> [STORAGE] Upload success. txSeq: 94301 assigned.", layer: "storage", delayMs: 1500 },
   { text: "> [CHAIN] Submitting merkle root to Escrow Contract...", layer: "chain", delayMs: 1000 },
-  { text: "> [CHAIN] Transaction confirmed (chainId: 16602, block: 142203).", layer: "chain", delayMs: 2000 },
+  { text: "> [CHAIN] Transaction confirmed (chainId: 16661, block: 142203).", layer: "chain", delayMs: 2000 },
   { text: "> [SYS] Cycle complete. Awaiting next trigger event.", layer: "sys", delayMs: 3000 },
 ];
 
@@ -268,7 +268,7 @@ function FullStackLive() {
                            Harap sesuaikan dengan data aktual Anda jika diperlukan.
                         */}
                         {layer.id === 'kv' && "Cross-restart memory"}
-                        {layer.id === 'compute' && "qwen-2.5-7b inference"}
+                        {layer.id === 'compute' && "0GM-1.0-35B-A3B inference"}
                         {layer.id === 'storage' && "Merkle-rooted outputs"}
                         {layer.id === 'chain' && "Smart contract registry"}
                       </div>

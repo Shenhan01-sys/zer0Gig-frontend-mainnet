@@ -116,7 +116,7 @@ export default function NetworkGuard({ children }: { children: React.ReactNode }
                 <div className="mt-5 pt-4 border-t border-white/[0.06] flex items-center justify-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-white/30 text-[10px] uppercase tracking-[0.2em] font-mono">
-                    0G Newton · Testnet
+                    0G Aristotle · Mainnet
                   </span>
                 </div>
               </div>

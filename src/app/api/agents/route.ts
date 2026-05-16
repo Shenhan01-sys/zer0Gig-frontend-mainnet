@@ -11,7 +11,7 @@ function getAdminClient() {
   );
 }
 
-const RPC_URL = process.env.OG_NEWTON_RPC_URL || "https://evmrpc-testnet.0g.ai";
+const RPC_URL = process.env.OG_NEWTON_RPC_URL || "https://evmrpc.0g.ai";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

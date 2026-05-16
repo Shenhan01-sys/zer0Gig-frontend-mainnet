@@ -20,7 +20,7 @@ import { CONTRACT_CONFIG, NETWORK_CONFIG } from "@/lib/contracts";
  *   4. Reads the agent wallet's on-chain balance and rejects if amount + gas
  *      reserve would overdraft.
  *   5. Signs and broadcasts a native OG transfer from agent.agentWallet to
- *      destination via the 0G Newton RPC.
+ *      destination via the 0G Aristotle RPC.
  *   6. Returns the real tx hash for chainscan.
  *
  * AGENT_WALLET_KEYS env format:
@@ -35,7 +35,7 @@ import { CONTRACT_CONFIG, NETWORK_CONFIG } from "@/lib/contracts";
  * so chainscan returns "tx not found" instead of a parse error.
  */
 
-const RPC_URL = process.env.OG_NEWTON_RPC_URL ?? "https://evmrpc-testnet.0g.ai";
+const RPC_URL = process.env.OG_NEWTON_RPC_URL ?? "https://evmrpc.0g.ai";
 
 const OG_NEWTON_CHAIN = defineChain({
   id:               NETWORK_CONFIG.chainId,

@@ -29,7 +29,7 @@ export default function RoleSelectModal({ isOpen, onConfirmed }: RoleSelectModal
   const handleConfirm = async () => {
     if (selected === null) return;
 
-    // Try to add/switch to 0G Newton via window.ethereum (MetaMask / injected wallet).
+    // Try to add/switch to 0G Aristotle via window.ethereum (MetaMask / injected wallet).
     // wallet_addEthereumChain sends the full chain spec including "OG" as the currency.
     // Privy embedded wallets don't expose window.ethereum — we skip this and let
     // wagmi handle the chain context automatically.

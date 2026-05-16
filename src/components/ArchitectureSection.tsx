@@ -110,7 +110,7 @@ export default function ArchitectureSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-[15px] text-white/40 text-center mb-20 max-w-lg mx-auto"
         >
-          Four contracts deployed on 0G Newton Testnet (chainId 16602) — from user intent to autonomous payout.
+          Four contracts deployed on 0G Aristotle Mainnet (chainId 16661) — from user intent to autonomous payout.
         </motion.p>
 
         {/* Node diagram */}

@@ -109,7 +109,7 @@ const LAYERS: LayerData[] = [
     id: "identity", label: "IDENTITY + ESCROW", sublabel: "ERC-7857 iNFT · ERC-8183 Escrow · 0G Chain",
     description: "The foundation layer. Every AI agent is an ERC-7857 iNFT — encrypted capability data, oracle-proven iTransfer / iClone, time-bounded authorizeUsage. Payments flow through ERC-8183 milestone-based progressive escrow.",
     accent: "#47A9CF", glow: "rgba(71,169,207,0.5)", stat: "ERC-7857", zBase: 0, floatDelay: 0,
-    stats: { type: "ERC-7857", escrow: "ERC-8183", chain: "Newton 16602" },
+    stats: { type: "ERC-7857", escrow: "ERC-8183", chain: "Aristotle 16661" },
     render: (cx, cy, a) => {
       const p = { isActive: a, accent: "#47A9CF", glow: "rgba(71,169,207,0.5)", deep: { top: "#032A3D", side: "#021F2E", dark: "#011620" } };
       return (<g>

@@ -130,7 +130,7 @@ export default function WithdrawPage() {
   // EOA balance: live native OG balance on the agent's autonomous wallet.
   const { data: eoaBalance, isLoading: eoaBalLoading, refetch: refetchEoa } = useBalance({
     address: selected?.agentWallet,
-    chainId: 16602,
+    chainId: 16661,
     query:   { enabled: !!selected, refetchInterval: 15_000 },
   });
   // Vault balance: agentId-keyed mapping inside AgentEarningsVault.
@@ -173,7 +173,7 @@ export default function WithdrawPage() {
   // confirmation rather than racing against block inclusion.
   const { data: depositReceipt } = useWaitForTransactionReceipt({
     hash:   depositTxHash ?? undefined,
-    chainId: 16602,
+    chainId: 16661,
     query:   { enabled: !!depositTxHash && depositState === "processing" },
   });
   useEffect(() => {
@@ -218,7 +218,7 @@ export default function WithdrawPage() {
   // declaring success.
   const { data: receipt } = useWaitForTransactionReceipt({
     hash:   source === "vault" && txHash ? txHash : undefined,
-    chainId: 16602,
+    chainId: 16661,
     query:   { enabled: source === "vault" && !!txHash },
   });
   useEffect(() => {
@@ -571,7 +571,7 @@ export default function WithdrawPage() {
                           </button>
                           {depositTxHash && depositState !== "idle" && (
                             <a
-                              href={`https://scan-testnet.0g.ai/tx/${depositTxHash}`}
+                              href={`https://chainscan.0g.ai/tx/${depositTxHash}`}
                               target="_blank"
                               rel="noreferrer"
                               className="block mt-2 text-[10px] font-mono text-white/35 hover:text-white/65 truncate"
@@ -803,7 +803,7 @@ export default function WithdrawPage() {
                   </div>
                   {!txMock && (
                     <a
-                      href={`https://scan-testnet.0g.ai/tx/${txHash}`}
+                      href={`https://chainscan.0g.ai/tx/${txHash}`}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-1 text-emerald-300 hover:text-emerald-200 text-[11px] font-medium shrink-0"
@@ -826,7 +826,7 @@ export default function WithdrawPage() {
               <span className="flex items-center gap-1">
                 <Coins className="w-3 h-3" /> Est. fee · ~0.001 OG
               </span>
-              <span>Network · 0G Newton · 16602</span>
+              <span>Network · 0G Aristotle · 16661</span>
             </div>
           </div>
         </div>

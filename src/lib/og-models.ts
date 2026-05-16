@@ -3,7 +3,8 @@
 // Sources:
 //   https://docs.0g.ai/developer-hub/building-on-0g/compute-network/inference
 //   https://compute-marketplace.0g.ai/inference
-//   https://0g.ai/blog/testnet-annoucement
+//   https://0g.ai/blog/0gm-1-0-35b-a3b (0GM-1.0 announcement, May 2026)
+//   https://0g.ai/blog/glm-5-live-on-0g-compute
 //
 // The provider/model catalog on 0G Compute is dynamic — providers join and
 // leave, pricing is per-provider. This file is the curated list of well-known
@@ -29,30 +30,93 @@ export interface OGModel {
 }
 
 export const OG_MODELS: OGModel[] = [
+  // ───── 0G-NATIVE (sovereign tier) ─────────────────────────────────────────
   {
-    id: "llama-3.3-70b-instruct",
-    name: "Llama 3.3 70B Instruct",
+    id: "0GM-1.0-35B-A3B",
+    name: "0GM-1.0 (35B-A3B)",
     tier: "frontier",
-    kind: "llm",
-    contextWindow: "128K tokens",
-    network: "testnet",
-    description: "Meta's flagship instruct-tuned model. Strong reasoning, code, multilingual.",
-    bestFor: "Complex agents, long-context tasks, multilingual support",
-    provider: "Meta (self-hosted on 0G)",
+    kind: "vision",
+    contextWindow: "262K → 1M tokens",
+    network: "mainnet",
+    description: "0G's first proprietary AI model. Trained, deployed, and served end-to-end on 0G Compute itself. 35B MoE (3B active), Qwen 3.6 architecture, fine-tuned for agentic coding and multi-step tool use.",
+    bestFor: "Agentic coding, autonomous task execution, multi-step reasoning",
+    provider: "0G Labs (sovereign)",
     status: "live",
   },
   {
-    id: "deepseek-r1-70b",
-    name: "DeepSeek R1 70B",
+    id: "deepseek-v4-pro",
+    name: "DeepSeek V4 Pro",
     tier: "frontier",
     kind: "llm",
-    contextWindow: "64K tokens",
-    network: "testnet",
-    description: "Reasoning-optimized model with chain-of-thought baked in. Excels at multi-step problems.",
-    bestFor: "Math, code, planning, research agents",
+    contextWindow: "1M tokens",
+    network: "mainnet",
+    description: "DeepSeek's flagship reasoning model. 1.6T total / 49B active params with DSA sparse attention. Strongest general reasoning available on 0G.",
+    bestFor: "Complex reasoning, planning, code generation, long-context tasks",
     provider: "DeepSeek (self-hosted on 0G)",
     status: "live",
   },
+  // ───── FOUNDATION MAINNET CATALOG ────────────────────────────────────────
+  {
+    id: "GLM-5-FP8",
+    name: "GLM-5 FP8",
+    tier: "frontier",
+    kind: "llm",
+    contextWindow: "128K tokens",
+    network: "mainnet",
+    description: "Zhipu AI's 744B MoE model — ranked #1 open-source by Artificial Analysis. FP8 quantized for performance.",
+    bestFor: "High-quality reasoning, research, complex analysis",
+    provider: "Zhipu AI (self-hosted on 0G)",
+    status: "live",
+  },
+  {
+    id: "deepseek-chat-v3-0324",
+    name: "DeepSeek Chat V3",
+    tier: "balanced",
+    kind: "llm",
+    contextWindow: "64K tokens",
+    network: "mainnet",
+    description: "Optimized conversational model. Fast turn-around with strong general capabilities.",
+    bestFor: "Customer service, conversational subscriptions, day-to-day agents",
+    provider: "DeepSeek (self-hosted on 0G)",
+    status: "live",
+  },
+  {
+    id: "gpt-oss-120b",
+    name: "GPT-OSS 120B",
+    tier: "frontier",
+    kind: "llm",
+    contextWindow: "32K tokens",
+    network: "mainnet",
+    description: "Large-scale open-source GPT model. Strong general-purpose performance.",
+    bestFor: "General agents, writing, code generation",
+    provider: "OpenAI-compatible",
+    status: "live",
+  },
+  {
+    id: "qwen3-vl-30b-a3b-instruct",
+    name: "Qwen3-VL 30B-A3B",
+    tier: "balanced",
+    kind: "vision",
+    contextWindow: "128K tokens",
+    network: "mainnet",
+    description: "Efficient multimodal model (vision + text). 30B MoE, 3B active.",
+    bestFor: "Multimodal agents, document understanding, image analysis",
+    provider: "Alibaba (self-hosted on 0G)",
+    status: "live",
+  },
+  {
+    id: "qwen3.6-plus",
+    name: "Qwen3.6-Plus",
+    tier: "frontier",
+    kind: "llm",
+    contextWindow: "1M tokens",
+    network: "mainnet",
+    description: "Alibaba's flagship LLM with hybrid linear attention and sparse MoE routing. Optimized for agentic coding, multi-step workflows. 119 languages. Via TeeTLS (Alibaba Cloud).",
+    bestFor: "Multi-lingual agents, long-context analysis, agentic workflows",
+    provider: "Alibaba Cloud (TeeTLS proxy)",
+    status: "live",
+  },
+  // ───── TESTNET (Galileo, chain 16602) — kept for cross-network reference ──
   {
     id: "qwen-2.5-7b",
     name: "Qwen 2.5 7B",
@@ -60,20 +124,20 @@ export const OG_MODELS: OGModel[] = [
     kind: "llm",
     contextWindow: "32K tokens",
     network: "testnet",
-    description: "Alibaba's general-purpose model. Default choice in zer0Gig's agent runtime.",
-    bestFor: "Coding, reasoning, day-to-day agent work",
+    description: "Alibaba's lightweight model — available on testnet for free development.",
+    bestFor: "Development, testing, low-stakes agents",
     provider: "Alibaba",
     status: "live",
   },
   {
     id: "gpt-oss-20b",
     name: "GPT-OSS 20B",
-    tier: "balanced",
+    tier: "fast",
     kind: "llm",
     contextWindow: "8K tokens",
     network: "testnet",
-    description: "Open-weights GPT alternative. Conversational, fast turn-around.",
-    bestFor: "Customer service bots, conversational subscriptions",
+    description: "Open-weights GPT alternative for testnet development.",
+    bestFor: "Development, conversational testing",
     provider: "OpenAI-compatible",
     status: "live",
   },
@@ -84,8 +148,8 @@ export const OG_MODELS: OGModel[] = [
     kind: "llm",
     contextWindow: "16K tokens",
     network: "testnet",
-    description: "Google's open-weights model. Strong analytical reasoning.",
-    bestFor: "Analysis, data extraction, document summarization",
+    description: "Google's open-weights model — testnet only.",
+    bestFor: "Development, analysis tasks",
     provider: "Google",
     status: "live",
   },
@@ -95,4 +159,5 @@ export function getModelById(id: string): OGModel | undefined {
   return OG_MODELS.find(m => m.id === id);
 }
 
-export const DEFAULT_MODEL_ID: string = "qwen-2.5-7b";
+// Default model — 0G's own model, optimized for agentic coding (zer0Gig's primary use case)
+export const DEFAULT_MODEL_ID: string = "0GM-1.0-35B-A3B";

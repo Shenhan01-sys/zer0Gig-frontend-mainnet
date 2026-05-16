@@ -679,7 +679,7 @@ export default function OnboardingPage() {
                       <p className="text-white/40 text-[13px] mb-2">0.5 OG sent to your wallet.</p>
                       {faucetTxHash && (
                         <a
-                          href={`https://scan-testnet.0g.ai/tx/${faucetTxHash}`}
+                          href={`https://chainscan.0g.ai/tx/${faucetTxHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-[#38bdf8] text-[12px] hover:underline"
@@ -746,7 +746,7 @@ export default function OnboardingPage() {
                     )}
                   </div>
                   {onChainRegState === "done" ? (
-                    <p className="text-white/40 text-[13px]">Your role is recorded on the 0G Newton testnet.</p>
+                    <p className="text-white/40 text-[13px]">Your role is recorded on the 0G Aristotle mainnet.</p>
                   ) : (
                     <>
                       <p className="text-white/40 text-[13px] mb-4">

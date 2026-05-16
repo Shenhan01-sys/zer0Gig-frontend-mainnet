@@ -17,7 +17,7 @@ import {
   type MarketplaceOrder,
 } from "@/hooks/useAgentMarketplace";
 
-const SCAN = "https://scan-testnet.0g.ai";
+const SCAN = "https://chainscan.0g.ai";
 
 export default function MyPurchasesPage() {
   const { authenticated, user, ready } = usePrivy();

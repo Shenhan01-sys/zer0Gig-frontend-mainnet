@@ -73,7 +73,7 @@ const STAKEHOLDERS = [
     initials: "0G",
     name:     "0G APAC Hackathon",
     role:     "Track 3 · Agentic Economy",
-    quote:    "First intelligent-NFT + agentic-commerce stack live on 0G Newton.",
+    quote:    "First intelligent-NFT + agentic-commerce stack live on 0G Aristotle.",
     accentA:  "#C084FC",
     accentB:  "#7C3AED",
     stamp:    "ecosystem",

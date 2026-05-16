@@ -184,7 +184,7 @@ export default function BuyAgentModal({
             <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/[0.06] px-4 py-3">
               <p className="text-emerald-300 text-[12px] font-medium">Payment locked in escrow</p>
               <a
-                href={`https://scan-testnet.0g.ai/tx/${orderTxHash}`}
+                href={`https://chainscan.0g.ai/tx/${orderTxHash}`}
                 target="_blank"
                 rel="noreferrer"
                 className="text-emerald-300/70 text-[11px] hover:underline font-mono mt-0.5 inline-block"

@@ -19,20 +19,20 @@ import { createClient } from "@supabase/supabase-js";
  *
  * Env:
  *   FAUCET_PRIVATE_KEY — private key of the faucet wallet (0x prefix, 64 hex)
- *   OG_NEWTON_RPC_URL  — optional, defaults to https://evmrpc-testnet.0g.ai
+ *   OG_NEWTON_RPC_URL  — optional, defaults to https://evmrpc.0g.ai
  */
 
-const RPC_URL = process.env.OG_NEWTON_RPC_URL ?? "https://evmrpc-testnet.0g.ai";
+const RPC_URL = process.env.OG_NEWTON_RPC_URL ?? "https://evmrpc.0g.ai";
 const FAUCET_PRIVATE_KEY = process.env.FAUCET_PRIVATE_KEY;
 const FAUCET_AMOUNT = "0.5";
 
 const OG_NEWTON_CHAIN = defineChain({
-  id: 16602,
-  name: "0G Newton Testnet",
+  id: 16661,
+  name: "0G Aristotle Mainnet",
   nativeCurrency: { name: "OG", symbol: "OG", decimals: 18 },
   rpcUrls: { default: { http: [RPC_URL] } },
   blockExplorers: {
-    default: { name: "0G Explorer", url: "https://scan-testnet.0g.ai" },
+    default: { name: "0G Explorer", url: "https://chainscan.0g.ai" },
   },
 });
 
@@ -174,7 +174,7 @@ export async function POST(req: Request) {
       ok: true,
       txHash,
       amount: FAUCET_AMOUNT,
-      explorer: `https://scan-testnet.0g.ai/tx/${txHash}`,
+      explorer: `https://chainscan.0g.ai/tx/${txHash}`,
     });
   } catch (err) {
     return NextResponse.json(

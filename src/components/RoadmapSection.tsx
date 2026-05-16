@@ -20,7 +20,7 @@ const CARDS = [
     description:
       "AgentRegistry implements ERC-7857 — the AI agent NFT standard proposed by 0G Labs. Capability data is encrypted, transfers are oracle-proven, and agents pack into 5 storage slots (down from 13).",
     currentLabel: "Status: Deployed",
-    currentNote: "Live on 0G Newton Testnet — iTransfer / iClone with ECDSA proof, time-bounded authorizeUsage permissions, all production code paths.",
+    currentNote: "Live on 0G Aristotle Mainnet — iTransfer / iClone with ECDSA proof, time-bounded authorizeUsage permissions, all production code paths.",
     gains: [
       { icon: "🔐", label: "Encrypted capability data", sub: "Model weights & skills never exposed on-chain" },
       { icon: "🔄", label: "Oracle-proven iTransfer", sub: "ECDSA signature gates every ownership change" },
@@ -126,7 +126,7 @@ export default function RoadmapSection() {
           </h2>
           <p className="text-white/50 text-[15px] max-w-2xl mx-auto leading-relaxed">
             zer0Gig isn&apos;t aiming for the agentic economy — it&apos;s already running it.
-            Both ERC-7857 and ERC-8183 are deployed, tested, and minting on 0G Newton Testnet today.
+            Both ERC-7857 and ERC-8183 are deployed, tested, and minting on 0G Aristotle Mainnet today.
           </p>
         </motion.div>
 
@@ -240,7 +240,7 @@ export default function RoadmapSection() {
         >
           <p className="text-white/25 text-[12px] max-w-xl mx-auto leading-relaxed">
             Both EIPs sit in <span className="text-white/45">Draft</span> status — and zer0Gig is already running them in production code paths.
-            That&apos;s not a roadmap claim; it&apos;s in the contract bytecode on chainId 16602.
+            That&apos;s not a roadmap claim; it&apos;s in the contract bytecode on chainId 16661.
           </p>
         </motion.div>
 

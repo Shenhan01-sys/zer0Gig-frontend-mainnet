@@ -397,7 +397,7 @@ export default function HeroSection() {
           </div>
         </div>
         <div className="pr-8 font-mono text-[10px] uppercase tracking-[0.25em] text-white/35 flex-shrink-0">
-          16602 · chain-id
+          16661 · chain-id
         </div>
       </div>
 

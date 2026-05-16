@@ -13,7 +13,7 @@ const AGENT_REGISTRY_ABI = [
   "function getAgentSkills(uint256 agentId) view returns (bytes32[])",
 ];
 
-const RPC_URL = "https://evmrpc-testnet.0g.ai";
+const RPC_URL = "https://evmrpc.0g.ai";
 const CONTRACT_ADDRESS = CONTRACT_ADDRESSES.AgentRegistry;
 
 

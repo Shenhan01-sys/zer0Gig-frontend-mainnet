@@ -67,7 +67,7 @@ const COUNTERS = [
 const TIMELINE = [
   { t: "T+0s",  label: "Subscription #3 ticks", detail: "SubscriptionEscrow.checkIn()" },
   { t: "T+1s",  label: "3 skills execute",     detail: "web_search · http_fetch · market_analysis" },
-  { t: "T+8s",  label: "0G Compute inference", detail: "qwen-2.5-7b · self-eval loop" },
+  { t: "T+8s",  label: "0G Compute inference", detail: "0GM-1.0-35B-A3B · self-eval loop" },
   { t: "T+12s", label: "Output uploaded",      detail: "0G Storage merkle root" },
   { t: "T+14s", label: "Drain confirmed",      detail: "CheckInDrained · 0.0003 OG → agent" },
 ];
@@ -115,7 +115,7 @@ function CounterCard({
         {/* Hidden reveal CTA — slides up + fades in on hover */}
         <HoverRevealCTA
           className="mt-3"
-          href="https://scan-testnet.0g.ai"
+          href="https://chainscan.0g.ai"
           label="View on chain"
           external
         />
@@ -230,11 +230,11 @@ export default function AutonomousProof() {
               </p>
               <div className="flex items-center gap-3">
                 <span className="text-[10px] font-mono text-white/25 uppercase tracking-widest">
-                  tx hashes documented · scan-testnet.0g.ai
+                  tx hashes documented · chainscan.0g.ai
                 </span>
                 {/* Hidden reveal CTA — slides up + fades in on hover */}
                 <HoverRevealCTA
-                  href="https://scan-testnet.0g.ai"
+                  href="https://chainscan.0g.ai"
                   label="View on chain"
                   external
                 />

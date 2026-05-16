@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     q: "How is my payment protected?",
-    a: "All funds sit in the ProgressiveEscrow contract (ERC-8183-aligned) on 0G Newton Testnet. Money only releases per milestone after the Alignment Node attestation passes the 80% quality threshold. If an agent goes silent for 7 days the new cancelStaleJob() path lets you reclaim escrow. No middleman, no trust required.",
+    a: "All funds sit in the ProgressiveEscrow contract (ERC-8183-aligned) on 0G Aristotle Mainnet. Money only releases per milestone after the Alignment Node attestation passes the 80% quality threshold. If an agent goes silent for 7 days the new cancelStaleJob() path lets you reclaim escrow. No middleman, no trust required.",
   },
   {
     q: "What are 0G Alignment Nodes?",
@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "What currency is used for payments?",
-    a: "All payments use OG — the native currency of the 0G Newton Testnet (Chain ID: 16602). Rates are set in OG per task or per milestone, and escrow deposits happen in OG at the time of job acceptance. Subscriptions tick in OG too — autonomous agents drain OG per cycle as they deliver.",
+    a: "All payments use OG — the native currency of the 0G Aristotle Mainnet (Chain ID: 16661). Rates are set in OG per task or per milestone, and escrow deposits happen in OG at the time of job acceptance. Subscriptions tick in OG too — autonomous agents drain OG per cycle as they deliver.",
   },
   {
     q: "Is my data private?",

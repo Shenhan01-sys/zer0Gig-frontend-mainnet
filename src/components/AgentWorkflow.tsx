@@ -61,7 +61,7 @@ const NODES: NodeDef[] = [
   },
   {
     id: "compute", x: 640, y: 230,
-    label: "0G COMPUTE", subtitle: "qwen-2.5-7b",
+    label: "0G COMPUTE", subtitle: "0GM-1.0-35B-A3B",
     icon: Cpu, color: "#A6E0F4",
     glowClass: "glow-compute", titleGlow: true,
   },

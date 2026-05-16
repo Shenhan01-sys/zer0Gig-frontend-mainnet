@@ -1,6 +1,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// DEPLOYED CONTRACT ADDRESSES (0G Newton Testnet - Chain ID: 16602)
-// Deployed: 2026-03-31
+// DEPLOYED CONTRACT ADDRESSES (0G Aristotle Mainnet - Chain ID: 16661)
+// Deployed: 2026-05-16 · Deployer: 0x48379F4d1427209311E9FF0bcC4a354953ea631B
+// All 6 contracts verified on https://chainscan.0g.ai
+// Authoritative record: project-mainnet/contracts/deployments/aristotle.json
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -37,26 +39,36 @@ export const SKILL_IDS = {
 } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// DEPLOYED CONTRACT ADDRESSES (0G Newton Testnet - Chain ID: 16602)
-// Deployed: 2026-04-28 (ERC-7857 + ERC-8183 migration)
-// Deployer: 0x48379F4d1427209311E9FF0bcC4a354953ea631B
+// DEPLOYED CONTRACT ADDRESSES (0G Aristotle Mainnet - Chain ID: 16661)
+// Deployed: 2026-05-16 · Deployer: 0x48379F4d1427209311E9FF0bcC4a354953ea631B
+// Alignment Verifier + Treasury: same as deployer (hackathon — pisahin sebelum production)
+// Total gas cost: 0.0407 OG. All contracts verified on chainscan.0g.ai
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const CONTRACT_ADDRESSES = {
-  AgentRegistry: "0x4c49D008E72eF1E098Bcd6E75857Ed17377dB4ab",
-  ProgressiveEscrow: "0xe9d1d260c08385b3beB68012D425e208b4cd2295",
-  SubscriptionEscrow: "0x088400FFf9d37851173e22eef904e710B88F6312",
-  UserRegistry: "0x1958bdbb5926674026b9ac630c9A4Cb91718Aee7",
-  // Deployed: 2026-05-12 by 0x48379F4d1427209311E9FF0bcC4a354953ea631B
-  // Treasury: same as deployer · references AgentRegistry above
-  // Scan: https://scan-testnet.0g.ai/address/0x02476780C4d2ae3AE7F54aFba35F25Df4F20d018
-  AgentMarketplace: "0x02476780C4d2ae3AE7F54aFba35F25Df4F20d018",
-  // Keyless agent earnings custody. Owner-of-iNFT gated withdrawals — no
-  // private keys held anywhere.
-  // Deployed: 2026-05-12 by 0x48379F4d1427209311E9FF0bcC4a354953ea631B
-  // References AgentRegistry above.
-  // Scan: https://scan-testnet.0g.ai/address/0x46aFcE8f7881b664bc7940d2b463f2b719B040f1
-  AgentEarningsVault: "0x46aFcE8f7881b664bc7940d2b463f2b719B040f1",
+  // ERC-7857 iNFT — agent identity, skills, per-skill reputation
+  // Scan: https://chainscan.0g.ai/address/0x0fAE6342195fdc0007B94Fb3293bF56463C55ff3#code
+  AgentRegistry: "0x0fAE6342195fdc0007B94Fb3293bF56463C55ff3",
+
+  // ERC-8183 Agentic Commerce — one-time jobs, milestone escrow, alignment gate
+  // Scan: https://chainscan.0g.ai/address/0x5A18F8D33D551666233701025754274dCA9B2929#code
+  ProgressiveEscrow: "0x5A18F8D33D551666233701025754274dCA9B2929",
+
+  // ERC-8183 Recurring Extension — subscriptions, 3 interval modes, OKX session voucher
+  // Scan: https://chainscan.0g.ai/address/0x7A072465AC232709C114C5DAa842a9b7010D1d4f#code
+  SubscriptionEscrow: "0x7A072465AC232709C114C5DAa842a9b7010D1d4f",
+
+  // Wallet role management (Client / FreelancerOwner)
+  // Scan: https://chainscan.0g.ai/address/0x10421Eb1A230F484eEdB64642505d073e791823c#code
+  UserRegistry: "0x10421Eb1A230F484eEdB64642505d073e791823c",
+
+  // P2P agent resale market (2.5% protocol fee to treasury)
+  // Scan: https://chainscan.0g.ai/address/0x3D33c7E30c9FC1AE387387dabb5a8fcc3333d83e#code
+  AgentMarketplace: "0x3D33c7E30c9FC1AE387387dabb5a8fcc3333d83e",
+
+  // Keyless agent earnings custody — owner-of-iNFT gated withdrawals
+  // Scan: https://chainscan.0g.ai/address/0x38f22fe2fF8f2e0bF346D2889a276c1b872B6880#code
+  AgentEarningsVault: "0x38f22fe2fF8f2e0bF346D2889a276c1b872B6880",
 } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -97,10 +109,10 @@ export type ContractName = keyof typeof CONTRACT_CONFIG;
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const NETWORK_CONFIG = {
-  chainId: 16602,
-  chainName: '0G Newton Testnet',
-  rpcUrl: 'https://rpc-testnet.0g.ai',
-  blockExplorer: 'https://scan-testnet.0g.ai',
+  chainId: 16661,
+  chainName: '0G Aristotle Mainnet',
+  rpcUrl: 'https://evmrpc.0g.ai',
+  blockExplorer: 'https://chainscan.0g.ai',
   nativeCurrency: {
     name: 'OG',
     symbol: 'OG',

@@ -56,8 +56,16 @@ interface PlatformConfig {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const LLM_PROVIDERS: { value: LLMProvider; label: string; color: string; defaultModel: string; needsKey: boolean; image?: string; models?: string[] }[] = [
-  { value: "0g_compute",  label: "0G Compute",  color: "#38bdf8", defaultModel: "qwen/qwen-2.5-7b-instruct",   needsKey: false, image: "/providers/0G-removebg-preview.png",
-    models: ["qwen/qwen-2.5-7b-instruct", "gpt-oss-20b", "gemma-3-27b"] },
+  { value: "0g_compute",  label: "0G Compute",  color: "#38bdf8", defaultModel: "0GM-1.0-35B-A3B",            needsKey: false, image: "/providers/0G-removebg-preview.png",
+    models: [
+      "0GM-1.0-35B-A3B",                  // 0G-native, agentic coding, 35B MoE (3B active), 1M context
+      "deepseek-v4-pro",                   // 1.6T / 49B active, 1M context, DSA sparse attention
+      "GLM-5-FP8",                         // 744B MoE, #1 open-source
+      "deepseek-chat-v3-0324",             // Fast conversational
+      "gpt-oss-120b",                      // Large-scale open-source GPT
+      "qwen3-vl-30b-a3b-instruct",         // Multimodal vision-language
+      "qwen3.6-plus",                      // Alibaba flagship, 1M context, TeeTLS
+    ] },
   { value: "groq",        label: "Groq",        color: "#f59e0b", defaultModel: "llama-3.3-70b-versatile",   needsKey: true,  image: "/providers/groq-removebg-preview.png",
     models: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768", "gemma2-9b-it"] },
   { value: "openai",      label: "OpenAI",      color: "#10b981", defaultModel: "gpt-4o-mini",               needsKey: true,  image: "/providers/openAI-removebg-preview.png",
@@ -75,7 +83,7 @@ const LLM_PROVIDERS: { value: LLMProvider; label: string; color: string; default
 const DEFAULT_PLATFORM_CONFIG: PlatformConfig = {
   llm: {
     provider: "0g_compute",
-    model: "qwen/qwen-2.5-7b-instruct",
+    model: "0GM-1.0-35B-A3B",
     apiKey: "",
     systemPrompt: "You are a professional AI freelance agent on the zer0Gig platform. Deliver high-quality, complete work. Your output will be verified by 0G Alignment Nodes.",
     maxTokens: 4096,

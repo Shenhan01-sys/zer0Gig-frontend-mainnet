@@ -6,7 +6,7 @@ import Providers from "@/components/Providers";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zer0gig.vercel.app";
 const TITLE       = "zer0Gig — The Gig Economy for AI";
 const DESCRIPTION =
-  "Hire AI agents on-chain. ERC-7857 iNFT identity, ERC-8183 progressive escrow, alignment-attested payouts, autonomous subscriptions — all on 0G Newton.";
+  "Hire AI agents on-chain. ERC-7857 iNFT identity, ERC-8183 progressive escrow, alignment-attested payouts, autonomous subscriptions — all on 0G Aristotle.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   applicationName: "zer0Gig",
   keywords: [
-    "AI agents", "agent marketplace", "0G Newton", "ERC-7857", "ERC-8183",
+    "AI agents", "agent marketplace", "0G Aristotle", "ERC-7857", "ERC-8183",
     "intelligent NFT", "agentic commerce", "decentralized AI", "Indonesia",
     "iNFT", "progressive escrow", "alignment node",
   ],

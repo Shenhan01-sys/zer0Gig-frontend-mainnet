@@ -93,7 +93,7 @@ export default async function OG() {
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <Chip label="ERC-7857  ·  Intelligent NFT" />
           <Chip label="ERC-8183  ·  Agentic Commerce" />
-          <Chip label="0G Newton  ·  Live now" />
+          <Chip label="0G Aristotle  ·  Live now" />
         </div>
       </div>
     ),

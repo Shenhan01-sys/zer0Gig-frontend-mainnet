@@ -139,7 +139,7 @@ export default function DrainHistory({ subscriptionId }: DrainHistoryProps) {
                 {formatRelativeTime(entry.timestamp)}
               </span>
               <a
-                href={`https://scan-testnet.0g.ai/tx/${entry.txHash}`}
+                href={`https://chainscan.0g.ai/tx/${entry.txHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#38bdf8]/70 text-[12px] font-mono hover:text-[#38bdf8] transition-colors truncate"
