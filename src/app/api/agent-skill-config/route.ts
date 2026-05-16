@@ -8,7 +8,9 @@ function getSupabase() {
   if (!url || !key) throw new Error("Supabase env vars missing");
   return createClient(url, key);
 }
-const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase: any = new Proxy({} as object, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(_, prop) { return (getSupabase() as any)[prop]; },
 });
 
