@@ -82,12 +82,11 @@ export default function OnboardingPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Step 4: on-chain activation + faucet
+  // Step 4: on-chain activation. Mainnet has no public faucet — users must
+  // fund their wallet via CEX (Binance/KuCoin) withdrawal to 0G Aristotle.
   const [onChainRegState, setOnChainRegState] = useState<"idle" | "switching" | "pending" | "done" | "error">("idle");
-  const [faucetState, setFaucetState] = useState<"idle" | "claiming" | "done" | "error">("idle");
-  const [faucetTxHash, setFaucetTxHash] = useState<string | null>(null);
-  const [faucetError, setFaucetError] = useState<string | null>(null);
-  const [faucetClaimAddress, setFaucetClaimAddress] = useState<string | null>(null); // Track which wallet claimed faucet
+  const [walletBalance, setWalletBalance] = useState<bigint | null>(null);
+  const [balanceCheckState, setBalanceCheckState] = useState<"idle" | "checking" | "funded" | "empty">("idle");
 
   const { register, isPending, isConfirming, isConfirmed, error: regError } = useRegisterUser();
 
@@ -100,36 +99,24 @@ export default function OnboardingPage() {
     if (regError) setOnChainRegState("error");
   }, [regError]);
 
-  // Step 4 auto-check: detect prior faucet claim + on-chain registration + balance
-  // (handles page refresh after partial completion, and API-insert-failure recovery)
+  // Step 4 auto-check: detect on-chain balance + prior registration.
+  // Mainnet flow: balance > 0 means user funded their wallet from a CEX → unlock register.
   useEffect(() => {
     if (step !== 4 || !walletAddress) return;
     let cancelled = false;
     (async () => {
       try {
-        // 1. Check if already claimed
-        const faucetRes = await fetch(`/api/faucet/claim?wallet=${walletAddress}`);
-        const faucetJson = await faucetRes.json();
-        if (!cancelled && faucetJson.ok && faucetJson.claimed) {
-          setFaucetState("done");
-          setFaucetTxHash(faucetJson.txHash ?? null);
-        }
-      } catch {
-        // Network failure — leave it to manual claim
-      }
-      try {
-        // 2. Check on-chain balance — if > 0 OG, unlock register button
-        // (handles the case where tx succeeded but Supabase insert failed)
+        setBalanceCheckState("checking");
         const publicClient = createPublicClient({
           chain: ogNewton,
           transport: http(),
         });
         const balance = await publicClient.getBalance({ address: walletAddress as `0x${string}` });
-        if (!cancelled && balance > 0n && faucetState !== "done") {
-          setFaucetState("done");
-        }
+        if (cancelled) return;
+        setWalletBalance(balance);
+        setBalanceCheckState(balance > 0n ? "funded" : "empty");
       } catch {
-        // Balance read failed
+        if (!cancelled) setBalanceCheckState("empty");
       }
       try {
         // 3. Check if already registered on-chain
@@ -304,16 +291,6 @@ export default function OnboardingPage() {
       }
     }
 
-    // ── CRITICAL: Faucet/Wallet mismatch detection ──────────────────────
-    // If faucet was claimed by a DIFFERENT wallet than currently active, block registration
-    if (faucetClaimAddress && walletAddress !== faucetClaimAddress) {
-      const err = `Wallet mismatch detected! Faucet was claimed by ${faucetClaimAddress.slice(0,6)}...${faucetClaimAddress.slice(-4)} but active wallet is ${walletAddress.slice(0,6)}...${walletAddress.slice(-4)}. Please disconnect MetaMask or switch to the correct wallet.`;
-      console.error("[Onboarding]", err);
-      setOnChainRegState("error");
-      setSubmitError(err);
-      return;
-    }
-
     // ── Wallet mismatch guard (Privy vs wagmi) ──────────────────────────
     if (walletMismatch) {
       const err = `Wallet mismatch: Privy embedded wallet (${privyAddress.slice(0,6)}...) differs from active wallet (${walletAddress.slice(0,6)}...). If you have MetaMask installed, please disconnect it or disable the extension temporarily.`;
@@ -330,7 +307,7 @@ export default function OnboardingPage() {
       console.log("[Onboarding] Balance check:", walletAddress, "=", balance.toString(), "wei");
       if (balance === 0n) {
         setOnChainRegState("error");
-        setSubmitError("Insufficient OG balance. Please claim faucet first. If you already claimed, your wallet may have changed.");
+        setSubmitError("Insufficient OG balance. Mainnet has no faucet — buy 0G on Binance / KuCoin and withdraw to your wallet on 0G Aristotle network.");
         return;
       }
     } catch (e) {
@@ -339,36 +316,20 @@ export default function OnboardingPage() {
 
     setOnChainRegState("pending");
     const roleNum = role === "agent_owner" ? 2 : 1;
-    console.log("[Onboarding] Registering with wallet:", walletAddress, "role:", roleNum, "chain:", chainId, "faucetAddr:", faucetClaimAddress);
+    console.log("[Onboarding] Registering with wallet:", walletAddress, "role:", roleNum, "chain:", chainId);
     register(roleNum);
   }
 
-  async function handleClaimFaucet() {
+  async function refreshBalance() {
     if (!walletAddress) return;
-    setFaucetState("claiming");
-    setFaucetError(null);
+    setBalanceCheckState("checking");
     try {
-      const res = await fetch("/api/faucet/claim", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ walletAddress }),
-      });
-      const json = await res.json();
-      if (!json.ok) {
-        const msg = json.error ?? "Claim failed";
-        // Already claimed = treat as success
-        if (msg.toLowerCase().includes("already claimed")) {
-          setFaucetState("done");
-          return;
-        }
-        throw new Error(msg);
-      }
-      setFaucetTxHash(json.txHash);
-      setFaucetClaimAddress(walletAddress); // Track which wallet received the faucet
-      setFaucetState("done");
-    } catch (e) {
-      setFaucetError(e instanceof Error ? e.message : "Claim failed");
-      setFaucetState("error");
+      const publicClient = createPublicClient({ chain: ogNewton, transport: http() });
+      const balance = await publicClient.getBalance({ address: walletAddress as `0x${string}` });
+      setWalletBalance(balance);
+      setBalanceCheckState(balance > 0n ? "funded" : "empty");
+    } catch {
+      setBalanceCheckState("empty");
     }
   }
 
@@ -455,7 +416,7 @@ export default function OnboardingPage() {
                         <p className="text-amber-400 text-[11px] font-medium">⚠️ Wallet mismatch</p>
                         <p className="text-amber-400/70 text-[10px] mt-0.5">
                           Privy wallet ({privyAddress.slice(0,6)}...{privyAddress.slice(-4)}) differs from active wallet. 
-                          Make sure you use the same wallet for faucet and registration.
+                          Make sure you use the same wallet for funding and registration.
                         </p>
                         <button
                           type="button"
@@ -661,79 +622,70 @@ export default function OnboardingPage() {
               <StepCard key="4">
                 <h1 className="text-3xl sm:text-4xl font-medium mb-2">Activate your account.</h1>
                 <p className="text-white/55 text-[15px] mb-8">
-                  Claim starter credits first, then register on-chain so the dashboard knows your workspace.
+                  Fund your wallet with 0G, then register on-chain so the dashboard knows your workspace.
                 </p>
 
-                {/* Faucet claim — FIRST, no dependencies */}
+                {/* Fund wallet — FIRST, no dependencies */}
                 <div className="rounded-xl border border-white/10 bg-[#050810]/60 p-5 mb-4">
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-white font-medium text-[15px]">Starter credits</p>
-                    {faucetState === "done" && (
+                    <p className="text-white font-medium text-[15px]">Fund your wallet</p>
+                    {balanceCheckState === "funded" && (
                       <span className="text-emerald-400 text-[12px] font-medium flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Claimed
+                        <Check className="w-3.5 h-3.5" /> Funded
                       </span>
                     )}
                   </div>
-                  {faucetState === "done" ? (
+                  {balanceCheckState === "funded" ? (
                     <>
-                      <p className="text-white/40 text-[13px] mb-2">0.5 OG sent to your wallet.</p>
-                      {faucetTxHash && (
-                        <a
-                          href={`https://chainscan.0g.ai/tx/${faucetTxHash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[#38bdf8] text-[12px] hover:underline"
-                        >
-                          View on explorer →
-                        </a>
-                      )}
+                      <p className="text-white/40 text-[13px] mb-2">
+                        Balance: {walletBalance ? (Number(walletBalance) / 1e18).toFixed(4) : "0"} OG
+                        <span className="text-white/30"> · Ready to register on-chain.</span>
+                      </p>
+                      <a
+                        href={`https://chainscan.0g.ai/address/${walletAddress}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#38bdf8] text-[12px] hover:underline"
+                      >
+                        View wallet on explorer →
+                      </a>
                     </>
                   ) : (
                     <>
-                      <p className="text-white/40 text-[13px] mb-4">
-                        Claim 0.5 OG from the community faucet to cover gas for your first on-chain transaction.
+                      <p className="text-white/40 text-[13px] mb-3">
+                        0G Aristotle is a real mainnet — there's no public faucet. You need to fund your wallet with native 0G to pay gas.
                       </p>
+                      <div className="rounded-lg border border-white/10 bg-[#0d1525]/40 px-3 py-3 mb-4 text-[12px] space-y-1.5">
+                        <p className="text-white/60 font-medium">How to get 0G:</p>
+                        <p className="text-white/40">
+                          1. Buy 0G on <a href="https://www.binance.com/en/convert" target="_blank" rel="noopener noreferrer" className="text-[#38bdf8] hover:underline">Binance Convert</a>, <a href="https://www.kucoin.com/trade/0G-USDT" target="_blank" rel="noopener noreferrer" className="text-[#38bdf8] hover:underline">KuCoin</a>, or any CEX listing 0G.
+                        </p>
+                        <p className="text-white/40">
+                          2. Withdraw to <span className="font-mono text-white/60">{walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : "your wallet"}</span> on the <b>0G Aristotle</b> network.
+                        </p>
+                        <p className="text-white/40">
+                          3. ~0.05 OG covers gas for registration + a few jobs.
+                        </p>
+                      </div>
                       <button
-                        onClick={handleClaimFaucet}
-                        disabled={faucetState === "claiming"}
+                        onClick={refreshBalance}
+                        disabled={balanceCheckState === "checking"}
                         className="w-full px-4 py-2.5 rounded-full bg-white text-black text-[13px] font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                       >
-                        {faucetState === "claiming" ? "Claiming…" : "Claim 0.5 OG"}
+                        {balanceCheckState === "checking" ? "Checking balance…" : "I've funded my wallet — check balance"}
                       </button>
-                      {faucetError && (
-                        <p className="text-red-400 text-[12px] mt-3">{faucetError}</p>
-                      )}
-                      {faucetState === "error" && (
-                        <button
-                          onClick={async () => {
-                            // Recovery: check on-chain balance directly
-                            try {
-                              const publicClient = createPublicClient({
-                                chain: ogNewton,
-                                transport: http(),
-                              });
-                              const balance = await publicClient.getBalance({ address: walletAddress as `0x${string}` });
-                              if (balance > 0n) {
-                                setFaucetState("done");
-                              } else {
-                                setFaucetError("No OG detected. Please try claiming again.");
-                              }
-                            } catch {
-                              setFaucetError("Could not verify balance. Please refresh the page.");
-                            }
-                          }}
-                          className="w-full mt-3 px-4 py-2 rounded-full border border-white/10 text-white/70 text-[12px] hover:text-white hover:border-white/30 transition-colors"
-                        >
-                          Already received? Verify balance
-                        </button>
+                      {balanceCheckState === "empty" && walletBalance === 0n && (
+                        <p className="text-amber-400/80 text-[12px] mt-3">
+                          Still 0 OG. CEX withdrawals usually arrive within 1-3 minutes. Click again to retry.
+                        </p>
                       )}
                     </>
                   )}
                 </div>
 
-                {/* On-chain registration — SECOND, requires faucet */}
+                {/* On-chain registration — SECOND, requires balance > 0 */}
                 <div className={`rounded-xl border p-5 mb-4 transition-all ${
-                  faucetState === "done"
+                  balanceCheckState === "funded"
                     ? "border-white/10 bg-[#050810]/60"
                     : "border-white/[0.04] bg-[#050810]/30 opacity-50"
                 }`}>
@@ -754,7 +706,7 @@ export default function OnboardingPage() {
                       </p>
                       <button
                         onClick={handleRegisterOnChain}
-                        disabled={faucetState !== "done" || onChainRegState === "switching" || onChainRegState === "pending"}
+                        disabled={balanceCheckState !== "funded" || onChainRegState === "switching" || onChainRegState === "pending"}
                         className="w-full px-4 py-2.5 rounded-full bg-[#0d1525]/90 border border-white/20 text-white text-[13px] font-medium hover:border-white/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                       >
                         {onChainRegState === "switching" ? "Switching network…" :
@@ -765,8 +717,8 @@ export default function OnboardingPage() {
                         <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2 mb-3">
                           <p className="text-amber-400 text-[12px] font-medium">⚠️ Wallet Mismatch Detected</p>
                           <p className="text-amber-400/70 text-[11px] mt-0.5">
-                            Privy wallet ({privyAddress.slice(0,6)}...{privyAddress.slice(-4)}) differs from active wallet ({walletAddress.slice(0,6)}...{walletAddress.slice(-4)}). 
-                            The faucet may have sent OG to a different address.
+                            Privy wallet ({privyAddress.slice(0,6)}...{privyAddress.slice(-4)}) differs from active wallet ({walletAddress.slice(0,6)}...{walletAddress.slice(-4)}).
+                            Your funded balance may be on a different address.
                           </p>
                           <button
                             type="button"
@@ -799,7 +751,7 @@ export default function OnboardingPage() {
                 <div className="flex justify-end">
                   <button
                     onClick={finishOnboarding}
-                    disabled={onChainRegState !== "done" || faucetState !== "done"}
+                    disabled={onChainRegState !== "done" || balanceCheckState !== "funded"}
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-[13px]"
                   >
                     Enter Dashboard
