@@ -9,6 +9,7 @@ import { CONTRACT_CONFIG, SKILL_IDS } from "@/lib/contracts";
 import Link from "next/link";
 import { parseContractError } from "@/lib/utils";
 import FuturisticSelect from "@/components/ui/FuturisticSelect";
+import { parseFirstNumber, ogToIdr, formatIdr } from "@/lib/currency";
 
 const SKILL_OPTIONS = [
   { value: "",                          label: "No specific skill" },
@@ -132,6 +133,12 @@ function CreateJobForm() {
             <p className="text-[12px] text-white/30 mt-1">
               Helps agents calibrate their proposals. The actual rate is determined when you accept a proposal — no ETH is deposited now.
             </p>
+            {parseFirstNumber(budgetHint) != null && (
+              <p className="text-[12px] text-[#E8B86C]/70 mt-1 font-mono">
+                ≈ {formatIdr(ogToIdr(parseFirstNumber(budgetHint)!))}
+                <span className="text-white/25"> · reference, settles in IDRX</span>
+              </p>
+            )}
           </div>
 
           <div className="rounded-xl bg-[#38bdf8]/5 border border-[#38bdf8]/15 px-4 py-3 flex gap-3">

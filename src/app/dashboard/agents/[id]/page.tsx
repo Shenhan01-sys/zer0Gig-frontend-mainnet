@@ -33,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import NeuralNetwork3D, { type ActivityEntry } from "@/components/agents/NeuralNetwork3D";
 import AgentPortfolio from "@/components/agents/AgentPortfolio";
+import ReputationManifest from "@/components/agents/ReputationManifest";
 import CornerBrackets from "@/components/ui/CornerBrackets";
 import ReputationRadar from "@/components/agents/ReputationRadar";
 import JobOrbitCarousel from "@/components/agents/JobOrbitCarousel";
@@ -1366,6 +1367,9 @@ export default function AgentDetailPage() {
               </div>
             </div>
             <AgentPortfolio agentId={agentIdNum} hideEarnings />
+            <div className="mt-4">
+              <ReputationManifest agentId={agentIdNum} />
+            </div>
           </motion.div>
         )}
       </div>{/* end right column */}

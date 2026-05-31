@@ -90,6 +90,7 @@ const PHASE_COLOR: Record<string, string> = {
   processing:        "text-[#a855f7]",
   uploading:         "text-amber-400",
   submitting:        "text-amber-400",
+  alignment_attestation: "text-indigo-400",
   completed:         "text-emerald-400",
   error:             "text-red-400",
 };

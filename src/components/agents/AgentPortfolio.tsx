@@ -40,6 +40,12 @@ function timeAgo(iso: string) {
   return `${Math.floor(days / 30)}mo ago`;
 }
 
+// A real on-chain/storage artifact starts 0x and is non-trivial in length.
+// Guards against the runtime's `mock-cid-…` fallback so we never link to a
+// dead reference as if it were verifiable proof.
+const isHash = (s?: string | null) =>
+  typeof s === "string" && s.startsWith("0x") && s.length >= 10;
+
 function PlatformBadge({ name }: { name: string }) {
   return (
     <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider bg-white/[0.04] border border-white/[0.08] text-white/40">
@@ -338,6 +344,39 @@ export default function AgentPortfolio({ agentId, hideEarnings = false }: { agen
                   {entry.platforms.map(p => <PlatformBadge key={p} name={p} />)}
                   {entry.output_types.map(t => <OutputTypeBadge key={t} type={t} />)}
                 </div>
+                {/* Verifiable proof chips — clickable 0G Compute / Storage / Chain receipts */}
+                {(entry.compute_model || isHash(entry.zg_res_key) || isHash(entry.tx_hash)) && (
+                  <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                    {entry.compute_model && (
+                      <span
+                        className="px-1.5 py-0.5 rounded text-[9px] font-mono text-sky-300/70 bg-sky-400/[0.07] border border-sky-400/15"
+                        title={`0G Compute · ${entry.compute_model}`}
+                      >
+                        ⚡ {entry.compute_model}
+                      </span>
+                    )}
+                    {isHash(entry.zg_res_key) && (
+                      <a
+                        href={`https://indexer-storage-turbo.0g.ai/download/${entry.zg_res_key}`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="px-1.5 py-0.5 rounded text-[9px] font-mono text-emerald-300/70 bg-emerald-400/[0.07] border border-emerald-400/15 hover:text-emerald-300 hover:border-emerald-400/30 transition-colors"
+                        title="View deliverable on 0G Storage"
+                      >
+                        0G Storage ↗
+                      </a>
+                    )}
+                    {isHash(entry.tx_hash) && (
+                      <a
+                        href={`https://chainscan.0g.ai/tx/${entry.tx_hash}`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="px-1.5 py-0.5 rounded text-[9px] font-mono text-amber-300/70 bg-amber-400/[0.07] border border-amber-400/15 hover:text-amber-300 hover:border-amber-400/30 transition-colors"
+                        title="Payment tx on 0G mainnet"
+                      >
+                        TX ↗
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="flex-shrink-0 flex flex-col items-end gap-1">
